@@ -38,8 +38,8 @@ struct HttpResponse {
   struct HttpHeader* headers;
 };
 
-extern void* send_http(void* req);
-extern void free_http_response(void* resp);
+extern struct HttpResponse* send_http(struct HttpRequest* req);
+extern void free_http_response(struct HttpResponse* resp);
 
 int main() {
   struct HttpRequest *req = malloc(sizeof(struct HttpRequest));
@@ -68,7 +68,7 @@ int main() {
   header2.value = "value2";
   req->headers[1] = header2;
 
-  struct HttpResponse* resp = (struct HttpResponse*)send_http((void*)req);
+  struct HttpResponse* resp = send_http(req);
 
   printf("status_code= %d unknown_err= %s \n", resp->status_code, resp->unknown_err);
 
@@ -83,7 +83,7 @@ int main() {
     printf("name= %s value= %s\n", resp->headers[i].name, resp->headers[1].value);
   }
 
-  free_http_response((void*) resp);
+  free_http_response(resp);
   free(req);
 
   return 0;
